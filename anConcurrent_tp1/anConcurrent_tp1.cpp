@@ -89,14 +89,13 @@ void read_y_then_x() {
 }
 
 
-//模拟下载，sleep 2S
-void dummy_download(std::string url) {
+
+void dummy_download_test(std::string url) {
 	std::this_thread::sleep_for(std::chrono::seconds(3));
 	std::cout <<  std::this_thread::get_id() << " complete download: " << url << std::endl;
 }
 
-//根据id返回用户名
-std::string get_user_name(int id) {
+std::string get_user_name_test(int id) {
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 	return "user_" + std::to_string(id);
 }
@@ -185,23 +184,24 @@ int main()
 
 	an_threadpools tp;
 
-	// 下载对应的url链接，没有返回值
-	tp.commit_task(dummy_download, "www.baidu.jpg");
-	tp.commit_task(dummy_download, "www.yy.jpg");
+	//不需等 线程执行结果的
+	tp.commit_task(dummy_download_test, "www.126.com/1.png");
+	tp.commit_task(dummy_download_test, "www.aliyun.com/2.png");
 
-	//线程执行结果的返回
+	//需要等 线程执行结果
 	std::vector<std::future<std::string>> vecStr;
-	//数据库根据id查询user name
-	vecStr.emplace_back(tp.commit_task(get_user_name, 101));
-	vecStr.emplace_back(tp.commit_task(get_user_name, 102));
+	vecStr.emplace_back(tp.commit_task(get_user_name_test, 1000));
+	vecStr.emplace_back(tp.commit_task(get_user_name_test, 1001));
 
-	/*//输出线程返回的值，实际中可以不要
+	/*//异步等
 	std::future<void> res1 = std::async(std::launch::async, [&vecStr]() {
 		for (auto &&ret : vecStr) {
 			std::cout << "get user: " << ret.get();
 		}
 		std::cout << std::endl;
 	});*/
+
+	//同步等
 	for (auto &&ret : vecStr) {
 		std::cout << "get user: " << ret.get();
 	}
