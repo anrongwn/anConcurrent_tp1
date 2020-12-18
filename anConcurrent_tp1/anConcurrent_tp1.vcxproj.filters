@@ -29,5 +29,8 @@
     <ClInclude Include="an_threadpools2.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="an_threadpools3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

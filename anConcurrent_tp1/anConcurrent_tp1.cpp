@@ -21,7 +21,7 @@
 #include "an_threadpools.h"
 
 #include "an_threadpools2.h"
-
+#include "an_threadpools3.h"
 
 std::future<int> launcher(std::packaged_task<int(int)> &tsk, int arg) {
 	if (tsk.valid()) {
@@ -205,7 +205,7 @@ int main()
 	//	std::cout << std::endl;
 	//});
 
-	/**无锁线程池**/
+	/**无锁 nonblock线程池*
 	an_threadpools2 tp2;
 
 	//不需等 线程执行结果的
@@ -216,8 +216,18 @@ int main()
 	std::vector<std::future<std::string>> vecStr;
 	vecStr.emplace_back(tp2.commit_task(get_user_name_test, 2000));
 	vecStr.emplace_back(tp2.commit_task(get_user_name_test, 2001));
+	*/
 
+	/**无锁 block线程池**/
+	an_threadpools3 tp3;
+	//不需等 线程执行结果的
+	tp3.commit_task(dummy_download_test, "www.126.com2/1.png");
+	tp3.commit_task(dummy_download_test, "www.aliyun.com2/2.png");
 
+	//需要等 线程执行结果
+	std::vector<std::future<std::string>> vecStr;
+	vecStr.emplace_back(tp3.commit_task(get_user_name_test, 2000));
+	vecStr.emplace_back(tp3.commit_task(get_user_name_test, 2001));
 
 
 	//同步等
@@ -227,10 +237,10 @@ int main()
 	std::cout << std::endl;
 
 
-	//for (;;) {
-	//	//std::this_thread::yield();
-	//	std::this_thread::sleep_for(std::chrono::microseconds(10));
-	//}
+	for (;;) {
+		//std::this_thread::yield();
+		std::this_thread::sleep_for(std::chrono::microseconds(10));
+	}
 
 	return 0;
 }
