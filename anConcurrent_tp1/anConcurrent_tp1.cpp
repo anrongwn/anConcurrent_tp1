@@ -20,6 +20,8 @@
 #include "an_threadsafe_queue.h"
 #include "an_threadpools.h"
 
+#include "an_threadpools2.h"
+
 
 std::future<int> launcher(std::packaged_task<int(int)> &tsk, int arg) {
 	if (tsk.valid()) {
@@ -182,6 +184,7 @@ int main()
 	//lock_free_stack<int> mystack;
 	//mystack.push(5);
 
+	/**有锁线程池
 	an_threadpools tp;
 
 	//不需等 线程执行结果的
@@ -192,14 +195,30 @@ int main()
 	std::vector<std::future<std::string>> vecStr;
 	vecStr.emplace_back(tp.commit_task(get_user_name_test, 1000));
 	vecStr.emplace_back(tp.commit_task(get_user_name_test, 1001));
+	*/
 
-	/*//异步等
-	std::future<void> res1 = std::async(std::launch::async, [&vecStr]() {
-		for (auto &&ret : vecStr) {
-			std::cout << "get user: " << ret.get();
-		}
-		std::cout << std::endl;
-	});*/
+	////异步等
+	//std::future<void> res1 = std::async(std::launch::async, [&vecStr]() {
+	//	for (auto &&ret : vecStr) {
+	//		std::cout << "get user: " << ret.get();
+	//	}
+	//	std::cout << std::endl;
+	//});
+
+	/**无锁线程池**/
+	an_threadpools2 tp2;
+
+	//不需等 线程执行结果的
+	tp2.commit_task(dummy_download_test, "www.126.com2/1.png");
+	tp2.commit_task(dummy_download_test, "www.aliyun.com2/2.png");
+
+	//需要等 线程执行结果
+	std::vector<std::future<std::string>> vecStr;
+	vecStr.emplace_back(tp2.commit_task(get_user_name_test, 2000));
+	vecStr.emplace_back(tp2.commit_task(get_user_name_test, 2001));
+
+
+
 
 	//同步等
 	for (auto &&ret : vecStr) {
@@ -208,9 +227,10 @@ int main()
 	std::cout << std::endl;
 
 
-	for (;;) {
-		std::this_thread::yield();
-	}
+	//for (;;) {
+	//	//std::this_thread::yield();
+	//	std::this_thread::sleep_for(std::chrono::microseconds(10));
+	//}
 
 	return 0;
 }
