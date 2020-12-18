@@ -13,7 +13,7 @@
 #include <stdexcept>
 #include "../deps/concurrentqueue/concurrentqueue.h"
 
-
+//non thread-safe 
 class an_threadpools2 {
 public:
 	explicit an_threadpools2(std::size_t count);
@@ -47,6 +47,7 @@ private:
 
 };
 
+//non thread-safe 
 an_threadpools2::an_threadpools2(std::size_t count) :stop_(false) {
 	std::size_t system_nums = an_threadpools2::get_thread_nums();
 	std::size_t workers = count > system_nums ? system_nums : count;
