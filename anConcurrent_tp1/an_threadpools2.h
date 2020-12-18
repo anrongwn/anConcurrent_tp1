@@ -31,7 +31,8 @@ public:
 	an_threadpools2&& operator=(an_threadpools2&&) = delete;
 private:
 	static inline std::size_t get_thread_nums() {
-		return (std::thread::hardware_concurrency() * 2 - 1);
+		//return (std::thread::hardware_concurrency() * 2 - 1);
+		return (std::thread::hardware_concurrency() + 1);
 	}
 
 private:
