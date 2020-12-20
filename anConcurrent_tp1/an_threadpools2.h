@@ -28,7 +28,7 @@ public:
 	an_threadpools2(const an_threadpools2&) = delete;
 	an_threadpools2& operator=(const an_threadpools2&) = delete;
 	an_threadpools2(an_threadpools2&&) = delete;
-	an_threadpools2&& operator=(an_threadpools2&&) = delete;
+	an_threadpools2& operator=(an_threadpools2&&) = delete;
 private:
 	static inline std::size_t get_thread_nums() {
 		//return (std::thread::hardware_concurrency() * 2 - 1);

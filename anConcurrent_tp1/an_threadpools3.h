@@ -30,7 +30,7 @@ public:
 	an_threadpools3(const an_threadpools3&) = delete;
 	an_threadpools3& operator=(const an_threadpools3&) = delete;
 	an_threadpools3(an_threadpools3&&) = delete;
-	an_threadpools3&& operator=(an_threadpools3&&) = delete;
+	an_threadpools3& operator=(an_threadpools3&&) = delete;
 private:
 	static inline std::size_t get_thread_nums() {
 		//return (std::thread::hardware_concurrency() * 2 - 1);
