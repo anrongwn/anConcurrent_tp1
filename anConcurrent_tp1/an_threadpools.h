@@ -47,7 +47,7 @@ an_threadpools::an_threadpools(std::size_t count) :stop_(false) {
 	std::size_t system_nums = an_threadpools::get_thread_nums();
 	std::size_t workers = count > system_nums ? system_nums : count;
 
-	for (std::size_t i = 0; i < system_nums; ++i) {
+	for (std::size_t i = 0; i < workers; ++i) {
 		thread_pools_.emplace_back(
 			[this]() {
 			while (true) {
